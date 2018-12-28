@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 
 local LAMBDA="%(?,%{$fg_bold[green]%}λ,%{$fg_bold[red]%}λ)"
+local DOLLAR="%(?,%{$fg_bold[green]%}$,%{$fg_bold[red]%}$)"
 if [[ "$USER" == "root" ]]; then USERCOLOR="red"; else USERCOLOR="yellow"; fi
 
 # Git sometimes goes into a detached head state. git_prompt_info doesn't
@@ -13,23 +14,23 @@ function check_git_prompt_info() {
 %{$fg[yellow]%}→ "
         else
             echo "$(git_prompt_info 2> /dev/null) $(git_prompt_status)
-%{$fg_bold[cyan]%}→ "
+$DOLLAR "
         fi
     else
-        echo "%{$fg_bold[cyan]%}→ "
+        echo "$DOLLAR "
     fi
 }
 
 function get_right_prompt() {
     if git rev-parse --git-dir > /dev/null 2>&1; then
-        echo -n "$(git_prompt_short_sha)%{$reset_color%}"
+        # echo -n "$(git_prompt_short_sha)%{$reset_color%}"
     else
         echo -n "%{$reset_color%}"
     fi
 }
 
-PROMPT=$'\n'$LAMBDA'\
- %{$fg_bold[$USERCOLOR]%}%n\
+PROMPT=$'\n''\
+%{$fg_bold[$USERCOLOR]%}%n\
  %{$fg_no_bold[magenta]%}[%3~]\
  $(check_git_prompt_info)\
 %{$reset_color%}'
